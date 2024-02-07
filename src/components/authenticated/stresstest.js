@@ -1,6 +1,11 @@
-import Problems from "../unauthenticated/problems";
+
+import { useNavigate } from "react-router-dom";
+import { useState} from "react";
 
 export default function Stresstest(){
+    const [submissionLink, setSubmissionLink] = useState("");
+    const [problemIndex, setProblemIndex] = useState("");
+    const navigate =useNavigate();
     return (
         <div style={{width: 780 ,marginLeft:"auto" ,marginRight: "auto" }}>
         <h1 style={{textAlign: "center"}}>Stress Test your Atcoder Problems</h1>
@@ -12,17 +17,31 @@ export default function Stresstest(){
                             <td>
                                 <b>Submission Link</b>
                             </td>
-                            <td><input className="form-control" type="text" name="submission_link" value="https://atcoder.jp/contests/arc166/****"/></td>
+                            <td><input
+                                className="form-control"
+                                type="text"
+                                name="submission_link"
+                                value={submissionLink}
+                                onChange={(e) => setSubmissionLink(e.target.value)}
+                            /></td>
                         </tr>
                         <tr>
                             <td><b>Problem Index</b></td>
-                            <td><input className="form-control" type="text" name="problem_index" value="c"/></td>
+                            <td><input
+                                className="form-control"
+                                type="text"
+                                name="problem_index"
+                                value={problemIndex}
+                                onChange={(e) => setProblemIndex(e.target.value)}
+                            /></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                {/*<input className="btn btn-sucess" type="submit" value="Stress Test" target="._blank" />*/}
-                <button className="btn btn-samples" type="submit" name="submit" value="samples" onClick={Problems()}>Stress Test</button>
+            <button className="btn btn-samples" type="submit" name="submit" value="samples" onClick={()=>callNext({submissionLink,problemIndex,navigate})}>Stress Test</button>
         </div>
 )
+}
+function callNext({submissionLink,problemIndex,navigate}) {
+    navigate("/problems", { state: { submissionLink, problemIndex } });
 }
