@@ -1,33 +1,35 @@
 import {useLocation} from "react-router-dom";
+import {useEffect, useState} from "react";
 export default function Problems(){
     const { state } = useLocation();
-    console.log(state.submissionLink)
-    let submittedCode
-    (async () => {
-        const mainUrl = "http://localhost:5000/problem";
-        const urlToInclude = state.submissionLink;
-        const encodedUrl = encodeURIComponent(urlToInclude);
-        const finalUrl = mainUrl + "?param=" + encodedUrl;
-        console.log(finalUrl);
-        const response = await fetch(finalUrl)
-        console.log(response.status)
-        switch (response.status) {
-            // status "OK"
-            case 200:
-                submittedCode= await response.body;
-                // console.log(submittedCode);
-                break;
-            // status "Not Found"
-            case 404:
-                console.log('Invalid submission link');
-                break
-            default :
+    const [submittedCode, setSubmittedCode] = useState(null);
+    async function fetchData() {
+        try {
+            const mainUrl = 'http://localhost:5000/problem';
+            const urlToInclude = state.submissionLink;
+            const encodedUrl = encodeURIComponent(urlToInclude);
+            const finalUrl = `${mainUrl}?param=${encodedUrl}`;
 
+            const response = await fetch(finalUrl);
+
+            console.log('response status is ', response.status);
+            switch (response.status) {
+                case 200:
+                    console.log('success');
+                    const codeText = response.text();
+                    codeText.then((text)=>setSubmittedCode(text))
+                    return
+                default:
+            }
+        }catch (error){
+            console.log(error)
         }
-    })();
+    }
+    fetchData().then(()=>console.log("the submitted code is",submittedCode));
+
     return (
         <div>
-            <p>Your submitted code is : {submittedCode}</p>
+            <pre>Your submitted code is :<br></br> {submittedCode}</pre>
         </div>
     )
 }
