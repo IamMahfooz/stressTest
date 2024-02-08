@@ -8,6 +8,7 @@ cases.
 
 ## How to Use :
 since the website is not hosted yet , you need to do it manually by hosting it locally .  
+Create a build of the React App and run the `node index.js`  from inside the server folder.
 1. In the homepage enter you submission-link.  
 2. Then enter the queries asked regarding testcase parameter.   
 3. Then click on DRY-RUN to see the first failing testcase [WIP] . Also, you can move to next failing testcase by clicking on next.
