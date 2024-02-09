@@ -28,8 +28,16 @@ export default function Problems(){
     fetchData().then(()=>console.log("the submitted code is",submittedCode));
 
     return (
-        <div>
-            <pre>Your submitted code is :<br></br> {submittedCode}</pre>
+        <div style={{width: 780, marginLeft: "auto", marginRight: "auto"}}>
+            <h1 style={{textAlign: "center"}}>Just Some some more queries :</h1><br/>
+            Do first line of input file is number of testcase ? :: <textarea >0/1</textarea><br/>
+            How many lines area there in each testcase ? :: <textarea>?</textarea><br/>
+            How many lines are there in each testcase output ? :: <textarea>?</textarea><br/><br/>
+            Your submitted Code was :<br/>
+            <pre style={{backgroundColor: "white"}}>{submittedCode}</pre><br/>
+            The failing testcase and and output are  ? :: <textarea>*****</textarea><br/><br/>
+
+
         </div>
     )
 }
