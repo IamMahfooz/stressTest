@@ -4,14 +4,16 @@ const express =require('express')
 const fs = require('fs').promises;
 
 const app = express();
-const port =5000
 app.use(express.static("../build"))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "../build", "index.html"));
 })
-app.get('/problem', (req, res)=> {
+app.get('/problem', (req,res)=>fetchAndRevert(req,res));
+app.listen(5000);
+
+function fetchAndRevert(req,res){
     const paramValue = req.query.param;
-    let submittedCode
+    let submittedCode =""
     console.log('Received parameter:', paramValue);
     async function fetchData() {
         try {
@@ -38,5 +40,18 @@ app.get('/problem', (req, res)=> {
                 });
         })
         res.send(submittedCode)});
-});
-app.listen(5000);
+
+}
+function fetchInAndOut(homepage,contestNumber,browser){
+    // async function fetchPage{
+    //     try {
+    //         const page = await browser.newPage();
+    //         await page.goto(homepage);
+    //         await page.waitForSelector(`[aria label="${contestNumber}"]`);
+    //         const foldUrl= await page.$eval()
+    //     }
+    //     catch (err){
+    //
+    //     }
+    // }
+}
