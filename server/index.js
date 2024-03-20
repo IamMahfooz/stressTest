@@ -11,7 +11,7 @@ const _ = require('lodash');
 app.use(express.json())
 app.use(express.static("../frontend/build"))
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, "../fronted/build", "index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 })
 app.get('/problem',(req, res)=>getSubmissionCode(req,res));
 app.post('/getMaps',(req,res)=>getFailingCases(req,res));
