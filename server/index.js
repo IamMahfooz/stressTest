@@ -3,7 +3,7 @@ const express = require('express')
 const app =express()
 const cors = require('cors');
 const fs = require('node:fs');
-const {exec} = require('child_process');
+const execSync = require('child_process').execSync;
 const _ = require('lodash');
 // path = require('path'),
 
@@ -26,7 +26,7 @@ const getSubmissionCode = async (req,res) => {
         const $=cheerio.load(body);
         const submittedCode= _.unescape($("#submission-code").html());
         // console.log(submittedCode)
-        writeCodetoFile(submittedCode);
+        writeCodeToFile(submittedCode);
         compileBinary();
         res.send(submittedCode);
     }catch (error){
@@ -54,38 +54,31 @@ function executeDiffs(submissionData){
 
     for(let i=0;i<files.length;i++){
         // console.log(`${i} file was ${files[i]}`);
-        exec(`cat ${folderPath}${files[i]} | ./a.out  > out.txt` ,
-            function (error, stdout, stderr) {
-                if (error !== null) {
-                    console.log('exec error2: ' + error);
-                }
-            });
+        execSync(`cat ${folderPath}${files[i]} | ./a.out  > out.txt`)
         // below reads doesn't works
         const filePath = __dirname+`/out.txt`
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                console.error(err);
-                // return;
-            }else{
-                console.log(`data from first file was ${data}`)
-                // userOutput[i]=data;
-            }
-        });
+        userOutput[i]=fs.readFileSync(filePath,
+            {encoding: 'utf8', flag: 'r'});
+        // console.log(`the data of ${i} is ${data}`)
         console.log(`completed file number ${i}`);
     }
-    // console.log(userOutput);
+    console.log(userOutput[0]);
 }
-function writeCodetoFile(submittedCode){
-    fs.writeFile('Output.cpp', submittedCode, (err) => {
-        if (err) throw err;
-    });
+function writeCodeToFile(submittedCode){
+    try {
+        fs.writeFileSync('Output.cpp', submittedCode)
+        //file written successfully
+    } catch (err) {
+        console.error(err)
+    }
 }
 function compileBinary(){
-    exec('g++ Output.cpp ' ,
-        function (error, stdout, stderr) {
-            if (error !== null) {
-                console.log('exec error: ' + error);
-            }
-        });
+    try {
+        const cmd = 'g++ Output.cpp ';
+        execSync(cmd).toString();
+    } catch (error) {
+        console.log(`Status Code: ${error.status} with '${error.message}'`);
+    }
+
 
 }
