@@ -4,7 +4,7 @@ export default function Problems(){
     const { state } = useLocation();
     let problemIndex =state.problemIndex;
     let contestNumber
-    let [testCaseNumbers,setTestCaseNumbers]=useState("NO")
+    let [testCaseNumbers,setTestCaseNumbers]=useState("YES")
     let [submittedCode, setSubmittedCode] = useState(null);
     let [inLine,setInLine]=useState("");
     let [outLine,setOutLine]=useState("");
@@ -50,7 +50,7 @@ export default function Problems(){
                     <td>
                         <select id="testcasesNumbers" onChange={(e)=>setTestCaseNumbers(e.target.value)}>
                             <option value="YES">YES</option>
-                            <option value="NO">No</option>
+                            <option value="NO">NO</option>
                         </select>
                     </td>
                 </tr>
@@ -106,7 +106,7 @@ function getFailingMaps(inLine,outLine,contestNumber,problemIndex,submittedCode,
         .then((response) => response.json())
         .then((data) =>{
             outData=data;
-            // console.log(outData.message)
+            console.log(outData)
         })
         .catch((error) => console.error("Error:", error));
 }

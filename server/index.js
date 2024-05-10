@@ -27,9 +27,7 @@ const getSubmissionCode = async (req,res) => {
         const body = await response.text();
         const $=cheerio.load(body);
         const submittedCode= _.unescape($("#submission-code").html());
-        // console.log(submittedCode)
-        // writeCodeToFile(submittedCode);
-        // compileBinary();
+
         res.send(submittedCode);
     }catch (error){
         console.log(error)
@@ -38,14 +36,14 @@ const getSubmissionCode = async (req,res) => {
 };
 const getFailingCases = (req,res)=>{
     let jsonData = req.body
-    // console.log(jsonData.outLine);
     jsonData=jsonData.inLine;
     const data ={
         message: "received",
         alert: "post successfully"
     }
-    res.send(JSON.stringify(data));
-    executeDiffs(jsonData);
+    // res.send(JSON.stringify(data));
+    const failingMap = executeDiffs(jsonData);
+    res.send(JSON.stringify(failingMap))
 }
 function executeDiffs(submissionData){
     const testcaseBool = submissionData.testCaseNumbers;
@@ -60,25 +58,52 @@ function executeDiffs(submissionData){
     writeCodeToFile(submittedCode);
     compileBinary();
 
-    let userOutput = ""
-    let sysOutput = ""
+    let testCases = []
 
     for(let i=0;i<files.length;i++){
-        // console.log(`${i} file was ${files[i]}`);
-        execSync(`cat ${folderPath}"/in/"${files[i]} | ./a.out  > out.txt`)
+        execSync(`cat ${folderPath}/in/${files[i]} | ./a.out  > out.txt`)
+        const input = fs.readFileSync(folderPath+"/in/"+files[i],{encoding: 'utf8', flag: 'r'});
         const filePath = __dirname+`/out.txt`
-        userOutput[i]=fs.readFileSync(filePath,
+        const userOutput=fs.readFileSync(filePath,
             {encoding: 'utf8', flag: 'r'});
-        sysOutput[i]=fs.readFileSync(folderPath+"/out/"+files[i],
+        const sysOutput=fs.readFileSync(folderPath+"/out/"+files[i],
             {encoding: 'utf8', flag: 'r'});
-        // console.log(`the data of ${i} is ${data}`)
+
+        if(testcaseBool==="NO"){
+            const testCase = {
+                input: input,
+                userOutput: userOutput,
+                sysOutput: sysOutput
+            };
+            if(userOutput!==sysOutput){
+                testCases.push(testCase);
+            }
+        }else{
+            const inputLines=input.split('\n').filter(line => line.trim() !== '');
+            inputLines.slice(1)
+            const userOutputLines = userOutput.split('\n').filter(line => line.trim() !== '');
+            const sysOutputLines = sysOutput.split('\n').filter(line => line.trim() !== '');
+            const numberOfTestcases = inputLines.length/inLine;
+            for(let i=0;i<numberOfTestcases;i++){
+                for(let j=0,k=0;j<inputLines.length,k<sysOutputLines.length;j+=inLine,k+=outLine){
+                    const testCase ={
+                        input : inputLines.slice(j,j+inLine),
+                        userOutput : userOutputLines.slice(k,k+outLine),
+                        sysOutput : sysOutputLines.slice(k,k+outLine)
+                    }
+                    if(!(_.isEqual(testCase.userOutput,testCase.sysOutput))){
+                        testCases.push(testCase);
+                    }
+                }
+            }
+        }
         console.log(`completed file number ${i}`);
+        // if(i===1){
+        //     break;
+        // }
     }
-    console.log(userOutput[0]);
-    console.log(sysOutput[0]);
-    // console.log(testcaseBool)
-    // console.log(inLine);
-    // console.log(outLine);
+    // console.log(testCases);
+    return testCases;
 }
 function writeCodeToFile(submittedCode){
     try {
