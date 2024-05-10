@@ -5,9 +5,9 @@ I leverage the platform’s test cases and user inputs. I
 isolate each test case, dry run the user’s code, retrieve
 expected outputs, and compare them to editorial solutions. This iterative process efficiently pinpoints discrepancies, aiding in quick identification of failing test
 cases.
-![img_3.png](img_3.png)  
+![HomePage](./frontend/public/img_3.png) 
 
-![img_2.png](img_2.png)
+![ProblemPage](./frontend/public/img_2.png)
 
 
 
