@@ -1,6 +1,6 @@
 export default function Navbar(){
     return <nav className="nav">
-        <a href="/" className="site-title">EaseCoding.com</a>
+        <a href="/" className="site-title">Stress-Test</a>
         <ul>
             <li className="active">
                 <a href="/stresstest">Stress-Test</a>

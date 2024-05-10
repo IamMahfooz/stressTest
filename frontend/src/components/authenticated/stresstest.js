@@ -7,13 +7,20 @@ export default function Stresstest(){
     const [problemIndex, setProblemIndex] = useState("");
     const navigate =useNavigate();
     return (
-        <div style={{width: 780 ,marginLeft:"auto" ,marginRight: "auto" }}>
-        <h1 style={{textAlign: "center"}}>Stress Test your Atcoder Problems</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vestibulum eu arcu mollis feugiat. Nunc et massa vel nibh aliquam auctor at nec tortor. Suspendisse laoreet ante sit amet magna interdum tristique. Aliquam erat volutpat. Aliquam tincidunt quam nec turpis mattis, in accumsan purus placerat. Aenean efficitur congue metus, at elementum arcu. Vivamus non suscipit odio. Praesent egestas ligula urna, sit amet iaculis dolor luctus vel. Quisque rutrum justo pretium, viverra sem non, iaculis lectus. Nunc ultrices libero posuere, efficitur arcu eu, fermentum dolor. Aenean pellentesque velit ac augue malesuada imperdiet. Sed id dui sodales, mattis mi a, sagittis nisi. Aenean consectetur efficitur justo, sit amet eleifend sem sagittis ac. </p>
+        <div style={{width: 1000 ,marginLeft:"auto" ,marginRight: "auto" ,backgroundColor:"Background",height:"auto",}}>
+        <h1 style={{textAlign: "center" ,color: "red"}}>Stress Test your Atcoder Problems</h1>
+            <p><h2> Have you ever stuck on a Problem for hours ?</h2><br/>
+                Well for Beginners-Intermediate it's a common thing :) ,But even the expert face it sometimes !<br/><br/>
+                To overcome this obstacle it's always good to take some genuine hints that help you think in a proper direction . <br/><br/>
+                Now what if someone gave you the failing test-case for your current submission , isn't that great to correct your path to
+                think in the right approach and SAVE your TIME ?<br/><br/>
+                If you wished the miracle to be true !! YEAH we won't upset you then :) <br/><br/>
+                <center>Just Enter some queries and you are good to GO .</center>
+            </p>
                 <div className="table-responsive " style={{display: "flex" ,justifyContent: "center" }}>
                     <table className="test-table">
                         <tbody>
-                        <tr>
+                        <tr >
                             <td>
                                 <b>Submission Link</b>
                             </td>
@@ -25,7 +32,7 @@ export default function Stresstest(){
                                 onChange={(e) => setSubmissionLink(e.target.value)}
                             /></td>
                         </tr>
-                        <tr>
+                        <tr >
                             <td><b>Problem Index</b></td>
                             <td><input
                                 className="form-control"
@@ -38,7 +45,7 @@ export default function Stresstest(){
                         </tbody>
                     </table>
                 </div>
-            <button className="btn btn-samples" type="submit" name="submit" value="samples" onClick={()=>callNext({submissionLink,problemIndex,navigate})}>Stress Test</button>
+            <button style={{marginTop:"10px"}} className="btn btn-samples" type="submit" name="submit" value="samples" onClick={()=>callNext({submissionLink,problemIndex,navigate})}><b>Stress Test</b></button>
         </div>
 )
 }

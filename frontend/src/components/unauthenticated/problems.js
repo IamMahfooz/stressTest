@@ -35,7 +35,7 @@ export default function Problems(){
     fetchData().then(()=>console.log("the submitted code is",submittedCode));
 
     return (
-        <div style={{width: 780 , marginLeft:"auto" , marginRight: "auto" }}>
+        <div style={{width: 1000 , marginLeft:"auto" , marginRight: "auto" }}>
             <b> <pre>Your submitted Code was :</pre></b>
             <pre style={{backgroundColor: "white" , overflowX:"scroll" ,overflowY:"scroll" ,height:"400px"}}>{submittedCode}</pre>
             <p>Just Some More Queries : - _ -</p>
