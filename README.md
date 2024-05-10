@@ -14,9 +14,12 @@ cases.
 ## How to Use :
 since the website is not hosted yet , you need to do it manually by hosting it locally .  
 Create a build of the React App and run the `node index.js`  from inside the server folder.
-1. In the homepage enter you submission-link.  
-2. Then enter the queries asked regarding testcase parameter.   
-3. Then click on "Failing testcases" to see the  failing testcase (for now , the failing cases are displayed in console log ; crtl+shift+I).
+1. Download the your contest Testcase folder from [Atcoder-dropBox](https://www.dropbox.com/sh/nx3tnilzqz7df8a/AAAYlTq2tiEHl5hsESw6-yfLa?dl=0) , and place  it in  a directory  "atcoder_testcases" .This directory is needed to be placed just before the project directory.
+   It will be fetched from index.js file `    const folderPath = "../../../atcoder_testcases/"+contestNumber+"/"+problemIndex;
+   `
+2. In the homepage enter you submission-link.  
+3. Then enter the queries asked regarding testcase parameter.   
+4. Then click on "Failing testcases" to see the  failing testcase (for now , the failing cases are displayed in console log ; crtl+shift+I).
 
 For Self Trial , You can use the following submission-link :
 https://atcoder.jp/contests/arc171/submissions/53214401
