@@ -5,10 +5,9 @@ I leverage the platform’s test cases and user inputs. I
 isolate each test case, dry run the user’s code, retrieve
 expected outputs, and compare them to editorial solutions. This iterative process efficiently pinpoints discrepancies, aiding in quick identification of failing test
 cases.
-![img_1.png](img_1.png)  
+![img_3.png](img_3.png)  
 
-![img.png](img.png)
-
+![img_2.png](img_2.png)
 
 
 
@@ -18,6 +17,9 @@ Create a build of the React App and run the `node index.js`  from inside the ser
 1. In the homepage enter you submission-link.  
 2. Then enter the queries asked regarding testcase parameter.   
 3. Then click on "Failing testcases" to see the  failing testcase (for now , the failing cases are displayed in console log ; crtl+shift+I).
+
+For Self Trial , You can use the following submission-link :
+https://atcoder.jp/contests/arc171/submissions/53214401
 
 ## Current Limitations :
 1. Unable to store output for large testcase files (Node.js heap out of memory).
