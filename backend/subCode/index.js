@@ -18,7 +18,7 @@ app.listen(5002);
 
 const getSubInfo = async(req,res)=>{
     try{
-        const url = req.query.param;
+        const url = req.body.url;
         console.log(url)
         const response =await fetch(url);
         const body = await response.text();
