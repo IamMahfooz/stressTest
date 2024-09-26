@@ -1,3 +1,5 @@
+// master server - entry point of backend request
+
 package main
 
 import (
