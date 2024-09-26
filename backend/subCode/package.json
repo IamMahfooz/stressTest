@@ -1,0 +1,11 @@
+{
+  "name": "subcode",
+  "version": "1.0.0",
+  "description": "directory for downloading user code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mahfooz",
+  "license": "ISC"
+}
