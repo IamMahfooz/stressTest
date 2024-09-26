@@ -2,10 +2,11 @@ package main
 
 import (
 	// "encoding/json"
-	"math/rand"
-	"encoding/json"
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os/exec"
 	"path/filepath"
@@ -22,7 +23,9 @@ type fTestMaps []struct {
 }
 
 type Request struct {
-	SubmissionLink      string `json:"submissionLink"`
+	CID string `json:"cid"`
+	PID string `json:"pid"`
+	SubCode string `json:"ucode"`
 	FirstLineIsNumTests bool   `json:"firstLineIsNumTests"`
 	NumLinesPerTestCase int    `json:"numLinesPerTestCase"`
 	NumLinesPerOutput   int    `json:"numLinesPerOutput"`
@@ -36,10 +39,9 @@ func startProcess(c echo.Context) error {
 	}
 
 	// Step 2: Fetch contest ID, submission code, and problem ID
-	contestID, problemID, submissionCode, err := fetchSubmissionDetails(req.SubmissionLink)
-	if err != nil {
-		return c.JSON(500, "Failed to fetch submission details")
-	}
+	contestID := req.CID
+	problemID:=req.PID
+	submissionCode := req.SubCode
 
 	// Step 3: Compile the user's submission code
 	binaryPath, err := compileSubmission(submissionCode)
@@ -64,33 +66,6 @@ func startProcess(c echo.Context) error {
 	return c.JSON(200, failingCases)
 }
 
-func fetchSubmissionDetails(link string) (string, string, string, error) {
-	// Logic to extract contest ID, problem ID, and submission code from the link
-	resp ,err := http.NewRequest("POST",link,nil)
-	if err!=nil{
-		fmt.Println("found error while fetchig submission details ",err)
-		return "","","",err
-	}
-	defer resp.Body.Close()
-	var body []byte
-	_,err= resp.Body.Read(body)
-	if err != nil{
-		fmt.Println("found error while fetchig submission details ",err)
-		return "","","",err
-	}
-	var subDetails struct{
-		Cid string `json:"cid"`
-		Pid string `json:"pid"`
-		Code string `json:"code"`
-	}
-	err = json.Unmarshal([]byte(body),&subDetails)
-		if err != nil{
-		fmt.Println("found error while fetchig submission details ",err)
-		return "","","",err
-	}
-	return subDetails.Cid, subDetails.Pid, subDetails.Code, nil
-}
-
 func compileSubmission(code string) (string, error) {
 	// Compile the code and return the binary path
 	binaryPath := "./compiled_binary"+string(rand.Intn(8000000))
@@ -103,7 +78,7 @@ func compileSubmission(code string) (string, error) {
 	cmd := exec.Command("g++", subfile, "-o", binaryPath)
 	err = cmd.Run()
 	if err != nil {
-		return "", err
+		return "error compiling the binary", err
 	}
 
 	return binaryPath, nil
@@ -111,6 +86,20 @@ func compileSubmission(code string) (string, error) {
 
 func fetchTestcases(contestID, problemID string) (string, error) {
 	// Fetch the test cases from the server and return the directory path
+
+	req,err := http.NewRequest("POST","https://api.dropboxapi.com/2/files/list_folder",bytes.NewBuffer([]byte("")))
+	if err !=nil{
+		fmt.Println("error while preparing request")
+	}
+	req.Header.Add("Dropbox-API-Arg",`{"url": "https://www.dropbox.com/sh/nx3tnilzqz7df8a/AAAYlTq2tiEHl5hsESw6-yfLa?dl=0", "path": "/ABC100/A/in/in02.txt"}`)
+	client := &http.Client{}
+	res,err := client.Do(req)
+	if err != nil{
+		fmt.Println("error fetching the response")
+	}
+	defer res.Body.Close()
+
+
 
 	testCasesDir := "./testcases"
 	return testCasesDir, nil
