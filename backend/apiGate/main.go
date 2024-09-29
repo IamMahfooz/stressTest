@@ -15,7 +15,7 @@ type Request struct {
 	NumLinesPerOutput   int    `json:"numLinesPerOutput"`
 }
 func main(){
-	// already has submission link , problem id and contest number
+	// already has submission link , problem id , contest id , TestCaseLine , numInputLine , numOutputLine
 	e :=echo.New()
 	e.POST("/start",workerServers)
 	e.Start(":5000")
