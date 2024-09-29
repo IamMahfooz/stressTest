@@ -41,6 +41,7 @@ func StartProcess(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(400, "Invalid request")
 	}
+	fmt.Println("the request struct was : \n", req)
 
 	// Step 2: Fetch contest ID, submission code, and problem ID
 	contestID := req.CID
@@ -52,12 +53,14 @@ func StartProcess(c echo.Context) error {
 	if err != nil {
 		return c.JSON(500, "Failed to compile submission")
 	}
+	fmt.Println("completed step 3")
 
 	// Step 4: Fetch the test cases
 	testCasesDir, err := FetchTestcases(contestID, problemID, uniqueIdentifier)
 	if err != nil {
 		return c.JSON(500, "Failed to fetch test cases")
 	}
+	fmt.Println("completed step 4 ")
 
 	// Step 5: Execute test cases and collect failing cases
 	var failingCases FTestMaps
@@ -85,6 +88,10 @@ func CompileSubmission(code string, uIdentify int) (string, error) {
 		return "error compiling the binary", err
 	}
 
+	err = os.Remove(subFile)
+	if err != nil {
+		fmt.Println("unable to remove the submission code from the server", err)
+	}
 	return binaryPath, nil
 }
 
@@ -101,22 +108,24 @@ func FetchTestcases(contestID, problemID string, uIdentify int) (string, error) 
 		fmt.Println("error while downloading zip file ; error :: ", err.Error())
 		return "", err
 	}
-	err = unzipFolder(testCaseFolder, uIdentify)
+	unzippedFolderPath, err := unzipFolder(testCaseFolder, uIdentify)
 	if err != nil {
 		fmt.Println("error while unzipping zip file ; error :: ", err.Error())
 	}
 	fmt.Println("downloaded the zip file")
-	return testCaseFolder, nil
+	return unzippedFolderPath, nil
 }
 
 func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCases *FTestMaps) error {
 	var wg sync.WaitGroup
 	files, err := ioutil.ReadDir(filepath.Join(testCasesDir, "in"))
 	if err != nil {
+		fmt.Println("error while joining path of testcase directory", testCasesDir)
 		return err
 	}
 
 	for _, file := range files {
+		fmt.Println("starting with file : ", file.Name())
 		if !file.IsDir() {
 			wg.Add(1)
 			go func(fileName string) {
@@ -128,12 +137,21 @@ func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCase
 			}(file.Name())
 		}
 	}
-
 	wg.Wait()
+	err = os.RemoveAll(testCasesDir)
+	if err != nil {
+		fmt.Println("error while removing testcases directory", testCasesDir)
+		return err
+	}
+	err = os.Remove(binaryPath)
+	if err != nil {
+		fmt.Println("error while removing code binary", binaryPath)
+	}
 	return nil
 }
 
 func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, failingCases *FTestMaps) error {
+	fmt.Println("starting file : ", fileName)
 	// Execute the test case and compare outputs
 	inputFilePath := filepath.Join(testCasesDir, "in", fileName)
 	outputFilePath := filepath.Join(testCasesDir, "out", fileName)
@@ -183,6 +201,15 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 		}
 	}
 	//fmt.Println("the failing testcases were : \n ", *failingCases)
+	// remove the file
+	err = os.Remove(inputFilePath)
+	if err != nil {
+		fmt.Println("error removing file : ", inputFilePath)
+	}
+	err = os.Remove(outputFilePath)
+	if err != nil {
+		fmt.Println("error removing file : ", inputFilePath)
+	}
 	return nil
 }
 
@@ -239,7 +266,7 @@ func downloadFile(filepath string, url string) (err error) {
 
 	return nil
 }
-func unzipFolder(folderPath string, uIdentify int) error {
+func unzipFolder(folderPath string, uIdentify int) (string, error) {
 	// Open a zip archive for reading.
 	r, err := zip.OpenReader(folderPath)
 	if err != nil {
@@ -295,7 +322,7 @@ func unzipFolder(folderPath string, uIdentify int) error {
 	err = os.RemoveAll(folderPath)
 	if err != nil {
 		fmt.Println("error while deleting the zip folder : ", err)
-		return err
+		return "", err
 	}
-	return nil
+	return "./testcases_" + strconv.Itoa(uIdentify), nil
 }
