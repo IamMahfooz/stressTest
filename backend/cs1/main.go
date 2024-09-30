@@ -5,10 +5,12 @@ import (
 	"compileServer1/utils"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"os"
 )
 
 func main() {
 
+	// demo WA link : https://atcoder.jp/contests/arc171/submissions/57212748
 	//curl command to test the full feature
 	//curl -H 'Content-Type: application/json' -X POST http://localhost:5001/compile -d '{
 	//"cid": "ARC171",
@@ -22,10 +24,15 @@ func main() {
 	//Step 0: Start the server
 	e := echo.New()
 	e.POST("/compile", utils.StartProcess)
-	err := e.Start(":5001")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":5001"
+	} else {
+		port = ":" + port
+	}
+	err := e.Start(port)
 	if err != nil {
 		fmt.Println("error while starting server : ", err.Error())
 		return
 	}
-	//fmt.Println("Starting the server at : 5001")
 }
