@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
+	"os"
 )
 type Request struct {
 	CID                 string `json:"cid"`
@@ -28,8 +29,17 @@ func main(){
 	// already has submission link , problem id , contest id , TestCaseLine , numInputLine , numOutputLine
 	e :=echo.New()
 	e.POST("/start",workerServers)
-	e.Start(":5000")
-
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":5004"
+	} else {
+		port = ":" + port
+	}
+	err := e.Start(port)
+		if err != nil {
+		fmt.Println("error while starting server : ", err.Error())
+		return
+	}
 }
 func workerServers(c echo.Context)error{
 	var workLink string
