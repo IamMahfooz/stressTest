@@ -24,7 +24,6 @@ type FTestMaps []struct {
 	SystemOutput string `json:"sOut"`
 	UserOutput   string `json:"uOut"`
 }
-
 type Request struct {
 	CID                 string `json:"cid"`
 	PID                 string `json:"pid"`
@@ -36,6 +35,7 @@ type Request struct {
 
 func StartProcess(c echo.Context) error {
 	uniqueIdentifier := rand.Intn(8000000)
+	var mu sync.Mutex
 
 	// Step 1: Get the request payload
 	req := new(Request)
@@ -65,7 +65,7 @@ func StartProcess(c echo.Context) error {
 
 	// Step 5: Execute test cases and collect failing cases
 	var failingCases FTestMaps
-	err = ExecuteTestCases(binaryPath, testCasesDir, req, &failingCases)
+	err = ExecuteTestCases(binaryPath, testCasesDir, req, &failingCases, &mu)
 	if err != nil {
 		return c.JSON(500, "Failed to execute test cases")
 	}
@@ -75,7 +75,12 @@ func StartProcess(c echo.Context) error {
 	if err != nil {
 		fmt.Println("error while creating json file", err)
 	}
-	defer fileJson.Close()
+	defer func(fileJson *os.File) {
+		err := fileJson.Close()
+		if err != nil {
+			fmt.Println("error while closing json file")
+		}
+	}(fileJson)
 	b, err := json.Marshal(failingCases)
 	if err != nil {
 		fmt.Println("error while marshalling failing cases", err)
@@ -84,6 +89,7 @@ func StartProcess(c echo.Context) error {
 	if err != nil {
 		fmt.Println("error while writing json file", err)
 	}
+
 	// Step 6: Send the failing test cases back as JSON
 	return c.JSON(200, failingCases)
 }
@@ -131,7 +137,7 @@ func FetchTestcases(contestID, problemID string, uIdentify int) (string, error) 
 	return unzippedFolderPath, nil
 }
 
-func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCases *FTestMaps) error {
+func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCases *FTestMaps, mu *sync.Mutex) error {
 	var wg sync.WaitGroup
 	files, err := ioutil.ReadDir(filepath.Join(testCasesDir, "in"))
 	if err != nil {
@@ -145,7 +151,7 @@ func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCase
 			wg.Add(1)
 			go func(fileName string) {
 				defer wg.Done()
-				err := ProcessTestCase(binaryPath, testCasesDir, fileName, req, failingCases)
+				err := ProcessTestCase(binaryPath, testCasesDir, fileName, req, failingCases, mu)
 				if err != nil {
 					fmt.Println("Error processing test case:", err)
 				}
@@ -165,7 +171,7 @@ func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCase
 	return nil
 }
 
-func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, failingCases *FTestMaps) error {
+func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, failingCases *FTestMaps, mu *sync.Mutex) error {
 	fmt.Println("starting file : ", fileName)
 	// Execute the test case and compare outputs
 	inputFilePath := filepath.Join(testCasesDir, "in", fileName)
@@ -190,7 +196,6 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 	}
 
 	// Split and compare outputs based on user-provided details
-	//os.Truncate(string(input), 6)
 	if req.FirstLineIsNumTests == true {
 		input = input[strings.IndexByte(string(input), 10)+1:]
 	}
@@ -198,9 +203,12 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 	expectedSections := splitIntoSections(string(expectedOutput), req.NumLinesPerOutput)
 	actualSections := splitIntoSections(string(actualOutput), req.NumLinesPerOutput)
 
+	var localFailingCases FTestMaps
+
+	// Identify failing cases for the current file
 	for i := 0; i < len(inputSections); i++ {
 		if expectedSections[i] != actualSections[i] {
-			*failingCases = append(*failingCases, struct {
+			localFailingCases = append(localFailingCases, struct {
 				Input        string `json:"in"`
 				SystemOutput string `json:"sOut"`
 				UserOutput   string `json:"uOut"`
@@ -209,13 +217,14 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 				SystemOutput: expectedSections[i],
 				UserOutput:   actualSections[i],
 			})
-			//fmt.Println("input : ", inputSections[i])
-			//fmt.Println("expected : ", expectedSections[i])
-			//fmt.Println("actual : ", actualSections[i])
-			//fmt.Println("------------------------------")
 		}
 	}
-	//fmt.Println("the failing testcases were : \n ", *failingCases)
+
+	// Lock the shared data structure before appending to maintain order
+	mu.Lock()
+	*failingCases = append(*failingCases, localFailingCases...)
+	mu.Unlock()
+
 	// remove the file
 	err = os.Remove(inputFilePath)
 	if err != nil {
@@ -308,7 +317,6 @@ func unzipFolder(folderPath string, uIdentify int) (string, error) {
 			}
 		}(rc)
 		// define the new file path
-		//fmt.Println("file name was : ", f.Name)
 		newFilePath := fmt.Sprintf("testcases_"+strconv.Itoa(uIdentify)+"/%s", f.Name)
 
 		// CASE 1 : we have a directory
