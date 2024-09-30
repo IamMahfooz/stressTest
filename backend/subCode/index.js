@@ -13,8 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/getsubinfo',(req,res)=>getSubInfo(req,res));
-console.log(" starting the server at port : 5002")
-app.listen(5002);
+const port = process.env.PORT || 5002
+console.log(" starting the server at port :", port)
+app.listen(port);
 
 const getSubInfo = async(req,res)=>{
     try{
