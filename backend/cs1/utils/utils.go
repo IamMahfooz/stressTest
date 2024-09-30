@@ -2,7 +2,6 @@ package utils
 
 import (
 	"archive/zip"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -71,24 +70,24 @@ func StartProcess(c echo.Context) error {
 	}
 
 	// Step 7 : Struct to json File
-	fileJson, err := os.Create("./result" + strconv.Itoa(uniqueIdentifier) + ".json")
-	if err != nil {
-		fmt.Println("error while creating json file", err)
-	}
-	defer func(fileJson *os.File) {
-		err := fileJson.Close()
-		if err != nil {
-			fmt.Println("error while closing json file")
-		}
-	}(fileJson)
-	b, err := json.Marshal(failingCases)
-	if err != nil {
-		fmt.Println("error while marshalling failing cases", err)
-	}
-	_, err = fileJson.Write(b)
-	if err != nil {
-		fmt.Println("error while writing json file", err)
-	}
+	//fileJson, err := os.Create("./result" + strconv.Itoa(uniqueIdentifier) + ".json")
+	//if err != nil {
+	//	fmt.Println("error while creating json file", err)
+	//}
+	//defer func(fileJson *os.File) {
+	//	err := fileJson.Close()
+	//	if err != nil {
+	//		fmt.Println("error while closing json file")
+	//	}
+	//}(fileJson)
+	//b, err := json.Marshal(failingCases)
+	//if err != nil {
+	//	fmt.Println("error while marshalling failing cases", err)
+	//}
+	//_, err = fileJson.Write(b)
+	//if err != nil {
+	//	fmt.Println("error while writing json file", err)
+	//}
 
 	// Step 6: Send the failing test cases back as JSON
 	return c.JSON(200, failingCases)
