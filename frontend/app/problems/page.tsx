@@ -4,6 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+// Define the TestCase interface
+interface TestCase {
+    in: string;
+    sOut: string;
+    uOut: string;
+}
+
 // Schema for form validation
 const formSchema = z.object({
     problemId: z.string().min(1, {
@@ -15,13 +22,14 @@ function Search() {
     let [inLine, setInLine] = useState("");
     let [outLine, setOutLine] = useState("");
     let [testCaseNumbers, setTestCaseNumbers] = useState("YES");
-    let [failingTestcases, setFailingTestcases] = useState([]);
+    // Update state to use TestCase type
+    let [failingTestcases, setFailingTestcases] = useState<TestCase[]>([]);
     let [currentTestCaseIndex, setCurrentTestCaseIndex] = useState(0);
     const searchParams = useSearchParams();
     const subUrl = searchParams.get('suburl');
     const [cid, setCid] = useState("");
     const [pid, setPid] = useState("");
-    const [code, setCode] = useState("Please wait while we retrieve your submitted code... ETA - 3 mins");
+    const [code, setCode] = useState("Please wait while we retrieve your submitted code...");
     const [isLoading, setIsLoading] = useState(false); // New loading state
 
     // Fetch submitted code
@@ -189,7 +197,7 @@ function Search() {
                             fontSize: "16px"
                         }}
                     >
-                        {isLoading ? "Fetching... ETA : 3 mins" : "Fetch Failing Test Cases"}
+                        {isLoading ? "Fetching..." : "Fetch Failing Test Cases"}
                     </Button>
                 </div>
 
@@ -224,34 +232,15 @@ function Search() {
         </>
     );
 }
-
 export default function SubmissionForm() {
     return (
         <Suspense fallback={<>Loading...</>}>
-            <Search />
+            <Search/>
         </Suspense>
     );
 }
-
-async function fetchTestcases(
-    cid: string,
-    pid: string,
-    code: string,
-    inLine: number,
-    outLine: number,
-    testcaseNumbers: boolean
-) {
+async function fetchTestcases(cid: string, pid: string, code: string, inLine: number, outLine: number, testcaseNumbers: boolean) {
     try {
-        // Log the request body to see if the cid and pid are being passed correctly
-        console.log("Request body:", {
-            cid: cid,
-            pid: pid,
-            ucode: code,
-            firstLineIsNumTests: testcaseNumbers,
-            numLinesPerTestCase: inLine,
-            numLinesPerOutput: outLine
-        });
-
         const response = await fetch("https://stress-test-v2-api-gateway.onrender.com/start", {
             method: "POST",
             headers: {
