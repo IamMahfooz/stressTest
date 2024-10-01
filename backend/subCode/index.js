@@ -1,9 +1,13 @@
 // server for webscrapping
 
-// Example to use : curl -X POST
-// "http://localhost:5002/getsubinfo?param=https://atcoder.jp/contests/arc171/submissions/50079569"
+// Example to use :
+// curl - H 'Content-Type: application/json' -
+//     X POST http:  // localhost:5002/getsubinfo -d '{"url":
+//                   // "https://atcoder.jp/contests/arc171/submissions/50079569"}'
 
-const express = require('express');
+
+
+    const express = require('express');
 const app = express();
 var cors = require('cors')
 const cheerio = require('cheerio');
@@ -36,6 +40,7 @@ const getSubInfo = async(req,res)=>{
             pid: problemId,
             ucode: submittedCode
         });
+        // console.log("succes \n",submittedCode)
 
     }catch(error){
         console.log("error while handling request : ", error)
