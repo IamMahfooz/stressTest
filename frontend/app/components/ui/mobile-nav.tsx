@@ -69,23 +69,7 @@ export function MobileNav() {
                         className="flex items-center"
                         onOpenChange={setOpen}
                     >
-                        <span className="font-sans">Problem</span>
-                    </MobileLink>
-                    <br/>
-                    <MobileLink
-                        href="/archive"
-                        className="flex items-center"
-                        onOpenChange={setOpen}
-                    >
                         <span className="font-sans">Archive</span>
-                    </MobileLink>
-                    <br/>
-                    <MobileLink
-                        href="/whiteboard"
-                        className="flex items-center"
-                        onOpenChange={setOpen}
-                    >
-                        <span className="font-sans">WhiteBoard</span>
                     </MobileLink>
                     <br/>
                     <MobileLink

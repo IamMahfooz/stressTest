@@ -1,12 +1,12 @@
 export const siteConfig = {
-    name: "Programmer's Board",
-    url: "https://ui.shadcn.com",
-    ogImage: "https://ui.shadcn.com/og.jpg",
+    name: "Atcoder Stress Testing",
+    url: "",
+    ogImage: "",
     description:
         "Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
     links: {
-        twitter: "https://twitter.com/shadcn",
-        github: "https://github.com/IamMahfooz",
+        twitter: "",
+        github: "https://github.com/IamMahfooz/stressTest/tree/v2",
     },
 }
 

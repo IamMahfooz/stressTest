@@ -18,7 +18,7 @@ export function MainNav() {
             </Link>
             <nav className="flex items-center gap-4 text-sm lg:gap-6">
                 <Link
-                    href="/archive"
+                    href="/"
                     className={cn(
                         "transition-colors hover:text-foreground/80",
                         pathname?.startsWith("/themes")
@@ -27,17 +27,6 @@ export function MainNav() {
                     )}
                 >
                     Archive
-                </Link>
-                <Link
-                    href="/whiteboard"
-                    className={cn(
-                        "transition-colors hover:text-foreground/80",
-                        pathname?.startsWith("/themes")
-                            ? "text-foreground"
-                            : "text-foreground/60"
-                    )}
-                >
-                    WhiteBoard
                 </Link>
                 <Link
                     href="https://discord.com/invite/asJbTym54w"

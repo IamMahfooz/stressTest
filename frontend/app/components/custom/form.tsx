@@ -9,9 +9,10 @@ const formSchema = z.object({
     }),
 })
 
-export default function ProfileForm(form: any) {
+export default function CodeForm(form: any) {
     const router = useRouter();
     return function onSubmit(values: z.infer<typeof formSchema>) {
-        router.push(`/problems/${values.problemUrl}`)
+        // console.log("form value was : ",values.problemUrl)
+        router.push('/problems?suburl=' + values.problemUrl)
     }
 }

@@ -2,7 +2,7 @@ import {siteConfig} from "@/config/site";
 
 export function SiteFooter() {
     return (
-        <footer className="sticky bottom-0 w-full py-6 md:px-8 md:py-0 bg-transparent">
+        <footer className="bottom-0 w-full py-6 md:px-8 md:py-0 bg-transparent">
             <div className="container flex flex-col items-center justify-center md:h-8 md:flex-row">
                 <p className="text-center text-sm leading-loose text-muted-foreground">
                     Built by{" "}
