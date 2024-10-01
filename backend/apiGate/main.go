@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"os"
 )
 type Request struct {
@@ -28,6 +29,7 @@ var workNumber int =0
 func main(){
 	// already has submission link , problem id , contest id , TestCaseLine , numInputLine , numOutputLine
 	e :=echo.New()
+	e.Use(middleware.CORS())
 	e.POST("/start",workerServers)
 	port := os.Getenv("PORT")
 	if port == "" {
