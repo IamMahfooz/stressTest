@@ -69,7 +69,7 @@ export default function ProblemForm() {
                                 name="problemUrl"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel style={{color: "#333", fontSize: "14px"}}>Submission Link</FormLabel>
+                                        <FormLabel style={{color: "#333", fontSize: "14px"}}>Submission Link (only submission to ARC171-A supported for demo purpose )</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="https://atcoder.jp/contests/arc171/submissions/57212748"

@@ -241,6 +241,11 @@ export default function SubmissionForm() {
 }
 async function fetchTestcases(cid: string, pid: string, code: string, inLine: number, outLine: number, testcaseNumbers: boolean) {
     try {
+        if(cid!="ARC171" && pid!="A"){
+            console.log("contest not added yet ! only ARC-171 A added for testing")
+            alert("contest not added yet ! only ''ARC-171 A`` added for demo purpose")
+            return "contest not added yet"
+        }
         const response = await fetch("https://stress-test-v2-api-gateway.onrender.com/start", {
             method: "POST",
             headers: {
