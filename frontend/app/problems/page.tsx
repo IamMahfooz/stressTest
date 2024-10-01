@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
@@ -21,10 +21,8 @@ function Search() {
     const subUrl = searchParams.get('suburl');
     const [cid, setCid] = useState("");
     const [pid, setPid] = useState("");
-    const [code, setCode] = useState("Please wait while we retrieve your submitted code...");
-    const [loading, setLoading] = useState(true);  // Loading state for fetching code
-    const [fetchingTestCases, setFetchingTestCases] = useState(false);  // Loading state for fetching test cases
-    const [buttonColor, setButtonColor] = useState("#28a745");  // Default button color
+    const [code, setCode] = useState("Please wait while we retrieve your submitted code... ETA - 3 mins");
+    const [isLoading, setIsLoading] = useState(false); // New loading state
 
     // Fetch submitted code
     useEffect(() => {
@@ -41,21 +39,19 @@ function Search() {
                 } else {
                     setCid(data.cid.toUpperCase());
                     setPid(data.pid.toUpperCase());
+                    console.log(data.cid.toUpperCase(), data.pid.toUpperCase());
                     setCode(data.ucode);
                 }
-                setLoading(false);  // Stop loading when code is fetched
             });
         });
     }, [subUrl]);
 
     // Handle submit to fetch failing test cases
     const handleSubmit = async () => {
-        setFetchingTestCases(true);  // Start loading for test cases
-        setButtonColor("#f0ad4e");  // Change button color to indicate loading
-
+        setIsLoading(true); // Set loading state to true
         const testcaseData = await fetchTestcases(
-            cid,  // Replace with actual contest ID
-            pid,  // Replace with actual problem ID
+            cid,
+            pid,
             code,
             parseInt(inLine),
             parseInt(outLine),
@@ -64,14 +60,12 @@ function Search() {
 
         if (testcaseData) {
             setFailingTestcases(testcaseData);
-            setCurrentTestCaseIndex(0);  // Reset to the first test case
+            setCurrentTestCaseIndex(0); // Reset to the first test case
         }
-
-        setFetchingTestCases(false);  // Stop loading
-        setButtonColor("#28a745");  // Reset button color to default
+        setIsLoading(false); // Set loading state back to false
     };
 
-    // Navigation buttons for test cases
+    // Navigation buttons
     const handleNext = () => {
         if (currentTestCaseIndex < failingTestcases.length - 1) {
             setCurrentTestCaseIndex(currentTestCaseIndex + 1);
@@ -99,33 +93,16 @@ function Search() {
                 <h2 style={{ textAlign: "center", color: "#333", marginBottom: "20px" }}>
                     Your Submitted Code:
                 </h2>
-
-                {/* Display loading spinner while fetching code */}
-                {loading ? (
-                    <div style={{ textAlign: "center" }}>
-                        <div className="spinner" style={{
-                            width: "50px",
-                            height: "50px",
-                            border: "5px solid #f3f3f3",
-                            borderRadius: "50%",
-                            borderTop: "5px solid #3498db",
-                            animation: "spin 1s linear infinite",
-                            margin: "0 auto"
-                        }}></div>
-                        <p>Loading code...</p>
-                    </div>
-                ) : (
-                    <pre style={{
-                        backgroundColor: "#fafafa",
-                        padding: "15px",
-                        borderRadius: "5px",
-                        border: "1px solid #ddd",
-                        height: "300px",
-                        overflowY: "auto"
-                    }}>
-                        {code}
-                    </pre>
-                )}
+                <pre style={{
+                    backgroundColor: "#fafafa",
+                    padding: "15px",
+                    borderRadius: "5px",
+                    border: "1px solid #ddd",
+                    height: "300px",
+                    overflowY: "auto"
+                }}>
+                    {code}
+                </pre>
 
                 <p style={{ marginTop: "20px", marginBottom: "20px", fontSize: "16px" }}>
                     Please provide additional details to continue:
@@ -199,33 +176,20 @@ function Search() {
 
                 {/* Submit button to fetch test cases */}
                 <div style={{ textAlign: "center" }}>
-                    <Button onClick={handleSubmit} style={{
-                        padding: "10px 20px",
-                        backgroundColor: buttonColor,
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        pointerEvents: fetchingTestCases ? "none" : "auto"  // Disable button while fetching
-                    }}>
-                        {fetchingTestCases ? (
-                            <>
-                                <div className="spinner" style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    border: "3px solid #f3f3f3",
-                                    borderRadius: "50%",
-                                    borderTop: "3px solid #3498db",
-                                    animation: "spin 1s linear infinite",
-                                    display: "inline-block",
-                                    marginRight: "10px"
-                                }}></div>
-                                Fetching Test Cases...
-                            </>
-                        ) : (
-                            "Fetch Failing Test Cases"
-                        )}
+                    <Button
+                        onClick={handleSubmit}
+                        disabled={isLoading} // Disable button while loading
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor: isLoading ? "#ccc" : "#28a745", // Change color when loading
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: isLoading ? "not-allowed" : "pointer",
+                            fontSize: "16px"
+                        }}
+                    >
+                        {isLoading ? "Fetching... ETA : 3 mins" : "Fetch Failing Test Cases"}
                     </Button>
                 </div>
 
@@ -240,30 +204,17 @@ function Search() {
                             border: "1px solid #f8d7da",
                             overflow: "auto"
                         }}>
-                            {failingTestcases[currentTestCaseIndex]}
-                        </pre>
-                        <div style={{ textAlign: "center", marginTop: "20px" }}>
-                            <Button onClick={handlePrevious} disabled={currentTestCaseIndex === 0} style={{
-                                padding: "10px 20px",
-                                backgroundColor: "#007bff",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                                fontSize: "16px",
-                                marginRight: "10px"
-                            }}>
+              <strong>Input:</strong> {failingTestcases[currentTestCaseIndex].in}
+                            <br />
+              <strong>System Output:</strong> {failingTestcases[currentTestCaseIndex].sOut}
+                            <br />
+              <strong>Your Output:</strong> {failingTestcases[currentTestCaseIndex].uOut}
+            </pre>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+                            <Button onClick={handlePrevious} disabled={currentTestCaseIndex === 0}>
                                 Previous
                             </Button>
-                            <Button onClick={handleNext} disabled={currentTestCaseIndex === failingTestcases.length - 1} style={{
-                                padding: "10px 20px",
-                                backgroundColor: "#007bff",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                                fontSize: "16px"
-                            }}>
+                            <Button onClick={handleNext} disabled={currentTestCaseIndex === failingTestcases.length - 1}>
                                 Next
                             </Button>
                         </div>
@@ -316,18 +267,11 @@ async function fetchTestcases(
             }),
         });
 
-        // Check if the response is ok
         if (!response.ok) {
             throw new Error("Failed to fetch test cases");
         }
-
-        // Log the response body
-        const data = await response.json();
-        console.log("The returned body was:", data); // Log the returned data
-
-        return data; // Return the JSON data
+        return await response.json();
     } catch (error) {
         console.error("Error fetching test cases:", error);
-        return null;
     }
 }
