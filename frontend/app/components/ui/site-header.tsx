@@ -2,9 +2,6 @@
 import {MainNav} from "./main-nav"
 import {ModeToggle} from "./mode-toogle"
 import {MobileNav} from "./mobile-nav"
-import Link from "next/link"
-import {useEffect, useState} from 'react';
-import {checkUserState, signout} from '@/app/components/custom/firebase-utils';
 
 
 export function SiteHeader() {
