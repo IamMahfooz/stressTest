@@ -5,6 +5,7 @@ import (
 	"compileServer1/utils"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"os"
 )
 
@@ -22,7 +23,9 @@ func main() {
 	//}'
 
 	//Step 0: Start the server
+
 	e := echo.New()
+	e.Use(middleware.CORS())
 	e.POST("/compile", utils.StartProcess)
 	port := os.Getenv("PORT")
 	if port == "" {
