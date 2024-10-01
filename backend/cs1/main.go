@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"os"
+	"net/http"
 )
 
 func main() {
@@ -27,6 +28,8 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	e.POST("/compile", utils.StartProcess)
+	e.GET("/ping",func(c echo.Context) error {return c.JSON(http.StatusOK,"i'm alive")})
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":5001"

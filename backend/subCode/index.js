@@ -28,6 +28,7 @@ app.use(corsMiddleware);
 app.use(express.json());
 
 app.post('/getsubinfo',(req,res)=>getSubInfo(req,res));
+app.get('/ping',(req,res)=>{res.json({status: 200})})
 const port = process.env.PORT || 5002
 console.log(" starting the server at port :", port)
 app.listen(port);

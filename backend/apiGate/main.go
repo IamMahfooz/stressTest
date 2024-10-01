@@ -31,6 +31,7 @@ func main(){
 	e :=echo.New()
 	e.Use(middleware.CORS())
 	e.POST("/start",workerServers)
+	e.GET("/ping",func(c echo.Context) error {return c.JSON(http.StatusOK,"i'm alive")})
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":5004"
