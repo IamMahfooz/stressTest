@@ -89,58 +89,37 @@ function Search() {
     return (
         <>
             <title>AST - Failing Maps</title>
-            <div style={{
-                width: "80%",
-                marginLeft: "auto",
-                marginRight: "auto",
-                backgroundColor: "#f5f5f5",
-                padding: "20px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
-            }}>
-                <h2 style={{ textAlign: "center", color: "#333", marginBottom: "20px" }}>
+            <div className="w-4/5 mx-auto bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h2 className="text-center text-gray-800 dark:text-gray-200 mb-6 text-xl font-bold">
                     Your Submitted Code:
                 </h2>
-                <pre style={{
-                    backgroundColor: "#fafafa",
-                    padding: "15px",
-                    borderRadius: "5px",
-                    border: "1px solid #ddd",
-                    height: "300px",
-                    overflowY: "auto"
-                }}>
-                    {code}
-                </pre>
+                <pre className="bg-gray-50 dark:bg-gray-900 dark:text-gray-200 p-4 rounded border border-gray-300 dark:border-gray-700 h-72 overflow-y-auto">
+      {code}
+    </pre>
 
-                <p style={{ marginTop: "20px", marginBottom: "20px", fontSize: "16px" }}>
+                <p className="mt-6 mb-4 text-lg text-gray-800 dark:text-gray-300">
                     Please provide additional details to continue:
                 </p>
 
-                <table style={{
-                    width: "100%",
-                    borderSpacing: "10px",
-                    marginBottom: "20px"
-                }}>
+                <table className="w-full border-spacing-2 mb-6">
                     <tbody>
                     <tr>
-                        <td style={{ textAlign: "left", fontWeight: "bold", padding: "10px" }}>
+                        <td className="text-left font-semibold text-gray-700 dark:text-gray-200 p-2">
                             Is the first line of input the number of test cases?
                         </td>
                         <td>
-                            <select id="testcaseNumbers" onChange={(e) => setTestCaseNumbers(e.target.value)} style={{
-                                padding: "10px",
-                                borderRadius: "5px",
-                                border: "1px solid #ddd",
-                                width: "100%",
-                                fontSize: "14px"
-                            }}>
+                            <select
+                                id="testcaseNumbers"
+                                onChange={(e) => setTestCaseNumbers(e.target.value)}
+                                className="p-2 rounded border border-gray-300 dark:border-gray-700 w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                            >
                                 <option value="YES">YES</option>
                                 <option value="NO">NO</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td style={{ textAlign: "left", fontWeight: "bold", padding: "10px" }}>
+                        <td className="text-left font-semibold text-gray-700 dark:text-gray-200 p-2">
                             How many lines are in each input test case?
                         </td>
                         <td>
@@ -149,18 +128,12 @@ function Search() {
                                 name="inLine"
                                 value={inLine}
                                 onChange={(e) => setInLine(e.target.value)}
-                                style={{
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                    border: "1px solid #ddd",
-                                    width: "100%",
-                                    fontSize: "14px"
-                                }}
+                                className="p-2 rounded border border-gray-300 dark:border-gray-700 w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                             />
                         </td>
                     </tr>
                     <tr>
-                        <td style={{ textAlign: "left", fontWeight: "bold", padding: "10px" }}>
+                        <td className="text-left font-semibold text-gray-700 dark:text-gray-200 p-2">
                             How many lines are in each output test case?
                         </td>
                         <td>
@@ -169,67 +142,70 @@ function Search() {
                                 name="outLine"
                                 value={outLine}
                                 onChange={(e) => setOutLine(e.target.value)}
-                                style={{
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                    border: "1px solid #ddd",
-                                    width: "100%",
-                                    fontSize: "14px"
-                                }}
+                                className="p-2 rounded border border-gray-300 dark:border-gray-700 w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                             />
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                {/* Submit button to fetch test cases */}
-                <div style={{ textAlign: "center" }}>
-                    <Button
+                {/* Submit button */}
+                <div className="text-center">
+                    <button
                         onClick={handleSubmit}
-                        disabled={isLoading} // Disable button while loading
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: isLoading ? "#ccc" : "#28a745", // Change color when loading
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: isLoading ? "not-allowed" : "pointer",
-                            fontSize: "16px"
-                        }}
+                        disabled={isLoading}
+                        className={`p-3 rounded text-white font-semibold transition duration-300 ease-in-out ${
+                            isLoading
+                                ? "bg-gray-500 cursor-not-allowed"
+                                : "bg-green-600 hover:bg-green-700"
+                        }`}
                     >
                         {isLoading ? "Fetching..." : "Fetch Failing Test Cases"}
-                    </Button>
+                    </button>
                 </div>
 
-                {/* Displaying the failing test cases */}
+                {/* Displaying failing test cases */}
                 {failingTestcases.length > 0 && (
-                    <div style={{ marginTop: "30px" }}>
-                        <h3 style={{ textAlign: "center" }}>Failing Test Case {currentTestCaseIndex + 1} / {failingTestcases.length}</h3>
-                        <pre style={{
-                            backgroundColor: "#fff3f3",
-                            padding: "15px",
-                            borderRadius: "5px",
-                            border: "1px solid #f8d7da",
-                            overflow: "auto"
-                        }}>
-              <strong>Input:</strong> {failingTestcases[currentTestCaseIndex].in}
+                    <div className="mt-10">
+                        <h3 className="text-center text-gray-800 dark:text-gray-200">
+                            Failing Test Case {currentTestCaseIndex + 1} / {failingTestcases.length}
+                        </h3>
+                        <pre className="bg-red-100 dark:bg-red-900 dark:text-red-200 p-4 rounded border border-red-400 dark:border-red-700 mt-4 overflow-auto">
+          <strong>Input:</strong> {failingTestcases[currentTestCaseIndex].in}
                             <br />
-              <strong>System Output:</strong> {failingTestcases[currentTestCaseIndex].sOut}
+          <strong>System Output:</strong> {failingTestcases[currentTestCaseIndex].sOut}
                             <br />
-              <strong>Your Output:</strong> {failingTestcases[currentTestCaseIndex].uOut}
-            </pre>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <Button onClick={handlePrevious} disabled={currentTestCaseIndex === 0}>
+          <strong>Your Output:</strong> {failingTestcases[currentTestCaseIndex].uOut}
+        </pre>
+                        <div className="flex justify-between mt-6">
+                            <button
+                                onClick={handlePrevious}
+                                disabled={currentTestCaseIndex === 0}
+                                className={`p-2 rounded text-white ${
+                                    currentTestCaseIndex === 0
+                                        ? "bg-gray-500 cursor-not-allowed"
+                                        : "bg-blue-600 hover:bg-blue-700"
+                                }`}
+                            >
                                 Previous
-                            </Button>
-                            <Button onClick={handleNext} disabled={currentTestCaseIndex === failingTestcases.length - 1}>
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                disabled={currentTestCaseIndex === failingTestcases.length - 1}
+                                className={`p-2 rounded text-white ${
+                                    currentTestCaseIndex === failingTestcases.length - 1
+                                        ? "bg-gray-500 cursor-not-allowed"
+                                        : "bg-blue-600 hover:bg-blue-700"
+                                }`}
+                            >
                                 Next
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 )}
             </div>
         </>
+
     );
 }
 export default function SubmissionForm() {

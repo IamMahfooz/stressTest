@@ -26,87 +26,59 @@ export default function ProblemForm() {
     return (
         <>
             <title>AST - Form Page</title>
-            <div style={{
-                maxWidth: '800px',
-                margin: '0 auto',
-                padding: '20px',
-                backgroundColor: '#f9f9f9',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            }}>
-                <h1 style={{
-                    textAlign: "center",
-                    color: "#333",
-                    fontSize: '24px',
-                    marginBottom: '16px'
-                }}>
+            <div className="max-w-2xl mx-auto p-6 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg">
+                <h1 className="text-center text-gray-800 dark:text-gray-200 text-2xl mb-4 font-bold">
                     Stress Test Your Atcoder Problems
                 </h1>
 
-                <p style={{
-                    fontSize: '16px',
-                    color: '#666',
-                    lineHeight: '1.6',
-                    marginBottom: '24px',
-                    textAlign: 'center'
-                }}>
-                    Have you ever been stuck on a problem for hours? It’s a common scenario for beginners and
-                    intermediates—and even experts experience it from time to time! Overcoming these challenges is key
-                    to improving, and the right hints can help guide you in the right direction. <br/><br/>
-
-                    Imagine if you could instantly receive the failing test case for your current submission. Wouldn’t
-                    that save time and point you toward the correct solution? <br/><br/>
-
-                    Now, that’s possible! Simply enter your query, and you’re good to go. <strong>Your path to
-                    efficiency starts here.</strong>
+                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 text-center">
+                    Have you ever been stuck on a problem for hours? It’s a common scenario for beginners and intermediates—and
+                    even experts experience it from time to time! Overcoming these challenges is key to improving, and the right
+                    hints can help guide you in the right direction.
+                    <br />
+                    <br />
+                    Imagine if you could instantly receive the failing test case for your current submission. Wouldn’t that save
+                    time and point you toward the correct solution?
+                    <br />
+                    <br />
+                    Now, that’s possible! Simply enter your query, and you’re good to go. <strong>Your path to efficiency starts
+                    here.</strong>
                 </p>
 
-                <div className="form-container" style={{display: "flex", justifyContent: "center"}}>
+                <div className="flex justify-center">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} style={{width: "100%"}}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
                             <FormField
                                 control={form.control}
                                 name="problemUrl"
-                                render={({field}) => (
+                                render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel style={{color: "#333", fontSize: "14px"}}>Submission Link (only submission to ARC171-A supported for demo purpose )</FormLabel>
+                                        <FormLabel className="text-gray-800 dark:text-gray-200 text-sm">Submission Link (only submission to ARC171-A supported for demo purpose)</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="https://atcoder.jp/contests/arc171/submissions/57212748"
                                                 {...field}
-                                                style={{
-                                                    border: '1px solid #ccc',
-                                                    borderRadius: '4px',
-                                                    padding: '10px',
-                                                    fontSize: '14px',
-                                                    width: '100%'
-                                                }}
+                                                className="border border-gray-300 dark:border-gray-700 rounded-md p-2 text-sm w-full dark:bg-gray-700 dark:text-gray-200"
                                             />
                                         </FormControl>
-                                        <FormDescription style={{color: "#666", fontSize: "12px", marginTop: '8px'}}>
+                                        <FormDescription className="text-gray-600 dark:text-gray-400 text-xs mt-2">
                                             Enter your Atcoder submission link
                                         </FormDescription>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full" style={{
-                                marginTop: '20px',
-                                padding: '10px 0',
-                                backgroundColor: '#4CAF50',
-                                color: '#fff',
-                                fontSize: '16px',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                border: 'none'
-                            }}>
+                            <button
+                                type="submit"
+                                className="w-full mt-6 p-3 bg-green-600 hover:bg-green-700 text-white text-lg rounded-md"
+                            >
                                 Submit
-                            </Button>
+                            </button>
                         </form>
                     </Form>
                 </div>
             </div>
-
         </>
+
     );
 }
