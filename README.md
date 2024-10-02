@@ -4,7 +4,7 @@
 Version 2 is now live! 🚀
 *(Main branch contains the prototype)*
 
-![atcoder](https://github.com/user-attachments/assets/572325a7-c8a6-4e16-ab9a-d429fe0f6a9c)
+![atcoder](https://github.com/user-attachments/assets/343f3124-4c63-45c3-937e-14c72d52147a)
 
 
 
