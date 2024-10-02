@@ -29,7 +29,7 @@ function Search() {
     const subUrl = searchParams.get('suburl');
     const [cid, setCid] = useState("");
     const [pid, setPid] = useState("");
-    const [code, setCode] = useState("Please wait while we retrieve your submitted code...");
+    const [code, setCode] = useState("Please wait while we retrieve your submitted code...ETA-3m");
     const [isLoading, setIsLoading] = useState(false); // New loading state
 
     // Fetch submitted code
@@ -160,7 +160,7 @@ function Search() {
                                 : "bg-green-600 hover:bg-green-700"
                         }`}
                     >
-                        {isLoading ? "Fetching..." : "Fetch Failing Test Cases"}
+                        {isLoading ? "Fetching...ETA-3m" : "Fetch Failing Test Cases"}
                     </button>
                 </div>
 
