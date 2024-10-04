@@ -1,9 +1,8 @@
 # Stress-Test Your Atcoder Problems Online - v2
+Exciting News! Version 2 is now live! 🚀   
+( *Main branch contains the prototype )
+![atcoder](https://github.com/user-attachments/assets/343f3124-4c63-45c3-937e-14c72d52147a) 
 
-**Exciting News!**
-Version 2 is now live! 🚀
-(Main branch contains the prototype)
-![atcoder](https://github.com/user-attachments/assets/343f3124-4c63-45c3-937e-14c72d52147a)
 ---
 
 ## 🔍 Overview
