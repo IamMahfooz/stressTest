@@ -1,6 +1,6 @@
-# Backend 
+# Backend
 ---
-### 🛠️  Tech Stack : 
+### 🛠️  Tech Stack :
 - Api Gateway : Golang
 - worker servers : Golang
 - Sub Code : Node.js
