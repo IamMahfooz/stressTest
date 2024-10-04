@@ -13,8 +13,9 @@ This microservice tool streamlines the debugging process for AtCoder problems by
 
 ## 🛠️ Tech Stack
 
-- **Backend:** Golang, Node.js, REST API, Docker (WIP - for scaling requests)  
+- **Backend:** Golang, Node.js, REST API .  
 - **Frontend:** Next.js, TailwindCSS, Bootstrap
+- **Integrations ( to be added )** : Redis , mongoDB and Docker . 
 
 ---
 
