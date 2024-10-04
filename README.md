@@ -1,13 +1,9 @@
-# Stress-Test Your AtCoder Problems Online - v2
+# Stress-Test Your Atcoder Problems Online - v2
 
 **Exciting News!**
 Version 2 is now live! 🚀
-*(Main branch contains the prototype)*
-
+(Main branch contains the prototype)
 ![atcoder](https://github.com/user-attachments/assets/343f3124-4c63-45c3-937e-14c72d52147a)
-
-
-
 ---
 
 ## 🔍 Overview
@@ -18,7 +14,7 @@ This microservice tool streamlines the debugging process for AtCoder problems by
 
 ## 🛠️ Tech Stack
 
-- **Backend:** Golang, REST API, Docker (WIP - for scaling requests)
+- **Backend:** Golang, Node.js, REST API, Docker (WIP - for scaling requests)  
 - **Frontend:** Next.js, TailwindCSS, Bootstrap
 
 ---
@@ -39,53 +35,27 @@ Frontend ➡️ subCode (Web Scraping) ➡️ Frontend ➡️ apiGate (API Gatew
 
 ---
 
-## 💻 How to Use
-*Available Endpoints* : `/compile`
-The frontend is still under development, but you can manually test the backend API using `curl`:
-```bash
-curl -H 'Content-Type: application/json' -X POST https://atcoder-stress-test-v2.onrender.com/ -d '{
-  "cid": "ARC171",
-  "pid": "A",
-  "ucode": "#include<bits/stdc++.h>\nusing namespace std;\n#define int long long\nconst int maxn = 100010;\nint T,n,a,b;\nsigned main(){\n\tcin>>T;\n\twhile(T--){\n\t\tcin>>n>>a>>b;\n\t\tif(a>=n/2){\n\t\t\tputs(b>(n-a)*(n-a) ? \"No\" : \"Yes\");\n\t\t}else{\n\t\t\tint Sp=n-a*2;\n\t\t\tputs(b>a*(n-a)+(a+Sp)*((Sp+1)/2) ? \"No\" : \"Yes\");\n\t\t}\n\t}\n}',
-  "firstLineIsNumTests": true,
-  "numLinesPerTestCase": 1,
-  "numLinesPerOutput": 1
-}'
-```
-
-## Example API Response
-```json
-{
-  "failingTestCases": [
-    {
-      "input": "testcase_input_here",
-      "systemOutput": "expected_output_here",
-      "userOutput": "user_output_here"
-    }
-  ]
-}
-```
-The response provides JSON data, highlighting failing test cases by showing the input, system output, and the output produced by the user's code.
-
+## 💻 How to Use  
+Just enter the submission link and you are good to GO !
+![Input](https://github.com/user-attachments/assets/b0cefe67-bb73-473f-beab-db306bf2d8cb)
 
 ---
 ## 🚧 Current Limitations
-1. **Command-Line Only**: Works via the command line interface (CLI) until the frontend is completed.
-2. **Manual Contest Links**: Contest links must be manually added to our database due to web scraping issues, resulting in a short delay after each contest before test cases are added.
-3. **Variable Line Support**: Does not support test cases with variable lines of input or output yet.
+1. **Delay in Response time**: Since the api gateway , worker-servers and code scrapping servers are hosted in Render's free service , so the services generally spins down due to inactivity and takes around 1-2 minutes to spin back again.
+1. **Manual Contest Links**: Contest links must be manually added to our database due to web scraping issues, resulting in a short delay after each contest before test cases are added.
+2. **Variable Line Support**: Does not support test cases with variable lines of input or output yet.
 
 ---
 ## 🎯 Future Targets
 
-- Custom Test Cases: Add functionality for users to write custom test cases for faster debugging.
-- AI-Powered Separation: Explore AI-powered tools to automate the separation of test cases, removing reliance on manual input.
-- Previous Submissions: Implement features to track and manage users' previous submissions on AtCoder.
+- **Custom Test Cases**: Add functionality for users to write custom test cases for faster debugging.
+- **AI-Powered Separation**: Explore AI-powered tools to automate the separation of test cases, removing reliance on manual input.
+- **Previous Submissions**: Implement features to track and manage users' previous submissions on AtCoder.
 
 ---
 ## 🤝 Contributions
-
 We welcome all contributions! If you're interested in improving the tool, feel free to:
-
 - Suggest improvements
 - Report issues
 - Help tackle existing limitations
+
