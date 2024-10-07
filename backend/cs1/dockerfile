@@ -1,0 +1,20 @@
+# download the base image (os for the app )
+FROM golang:alpine@latest
+
+WORKDIR /usr/local/app
+
+# source -> destination
+COPY ./backend/cs1 ./docker-worker-server
+
+# nothing to do with open ports , just for viewer to acess server will run on which port
+EXPOSE 5001
+
+# download the dependencies
+RUN go mod download
+
+#configure final image ( command to start the server )
+ENTRYPOINT ["go","run","main.go"]
+
+
+
+
