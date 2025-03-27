@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type FTestMaps []struct {
+type FTestMaps struct {
 	Input        string `json:"in"`
 	SystemOutput string `json:"sOut"`
 	UserOutput   string `json:"uOut"`
@@ -56,11 +56,19 @@ func StartProcess(c echo.Context) error {
 	fmt.Println("completed step 4 ")
 
 	// Step 5: Execute test cases and collect failing cases
-	var failingCases FTestMaps
-	err = ExecuteTestCases(binaryPath, testCasesDir, req, &failingCases, &mu)
+	failingCasesMaps := make(map[int][]*FTestMaps)
+	err = ExecuteTestCases(binaryPath, testCasesDir, req, failingCasesMaps, &mu)
 	if err != nil {
 		FullWipeOut(strconv.Itoa(uniqueIdentifier))
 		return c.JSON(500, "Failed to execute test cases")
+	}
+	fmt.Println("completed step 5")
+
+	var failingCases []FTestMaps
+	for i := 0; i < len(failingCasesMaps); i++ {
+		for _, testCase := range failingCasesMaps[i] {
+			failingCases = append(failingCases, *testCase)
+		}
 	}
 
 	// Step 7 : Struct to json File

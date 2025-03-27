@@ -23,11 +23,11 @@ func CompileSubmission(code string, uIdentify int) (string, error) {
 	if err != nil {
 		return "error compiling the binary", err
 	}
-	
+
 	return binaryPath, err
 }
 
-func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCases *FTestMaps, mu *sync.Mutex) error {
+func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCases map[int][]*FTestMaps, mu *sync.Mutex) error {
 	var wg sync.WaitGroup
 	files, err := ioutil.ReadDir(filepath.Join(testCasesDir, "in"))
 	if err != nil {
@@ -35,13 +35,13 @@ func ExecuteTestCases(binaryPath, testCasesDir string, req *Request, failingCase
 		return err
 	}
 
-	for _, file := range files {
+	for i, file := range files {
 		fmt.Println("starting with file : ", file.Name())
 		if !file.IsDir() {
 			wg.Add(1)
 			go func(fileName string) {
 				defer wg.Done()
-				err := ProcessTestCase(binaryPath, testCasesDir, fileName, req, failingCases, mu)
+				err := ProcessTestCase(binaryPath, testCasesDir, fileName, req, i, failingCases, mu)
 				if err != nil {
 					fmt.Println("Error processing test case:", err)
 				}

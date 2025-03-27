@@ -14,10 +14,14 @@ func FetchTestcases(contestID, problemID string, uIdentify int) (string, error) 
 	// Fetch the test cases from the server and return the directory path
 
 	// make a database to fetch urlId according to contestID ; every problem id has its own unique link identifier
-	// ---- fixing the final url untill atcoder starts publishing the testcases again.
-	// problemUniqueId := "AABE4bXm7hDlF4CZt0DfUtL-a" // ARC171-A
+	// the problemUniqueId is different for each contest
+	// problemUniqueId := "AABE4bXm7hDlF4CZt0DfUtL-a" // ARC171
 	// finalUrl := "https://www.dropbox.com/sh/nx3tnilzqz7df8a/" + problemUniqueId + "/" + contestID + "/" + problemID + "?dl=1"
+
+	// ---- fixing the final url until atcoder starts publishing the testcases again.
 	finalUrl := "https://www.dropbox.com/scl/fo/ctbefh5jjf8uwx6i5dbuy/AH9IK06EAVcGc39oWTCsUek?rlkey=220o6ubtbw308rjs0tj6g8ig1&st=llqs8kga&dl=1"
+	// ----
+
 	fmt.Println("final url was : ", finalUrl)
 	testCaseFolder := "./" + strconv.Itoa(uIdentify) + ".zip"
 	err := downloadFile(testCaseFolder, finalUrl)

@@ -9,11 +9,11 @@ import (
 	"sync"
 )
 
-func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, failingCases *FTestMaps, mu *sync.Mutex) error {
+func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, index int, failingCases map[int][]*FTestMaps, mu *sync.Mutex) error {
 	fmt.Println("starting file : ", fileName)
 	// Execute the test case and compare outputs
 	inputFilePath := filepath.Join(testCasesDir, "in", fileName)
-	outputFilePath := filepath.Join(testCasesDir, "out", fileName)
+	outputFilePath := filepath.Join(testCasesDir, "out", "out"+fileName[2:])
 
 	input, err := ioutil.ReadFile(inputFilePath)
 	if err != nil {
@@ -41,16 +41,12 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 	expectedSections := splitIntoSections(string(expectedOutput), req.NumLinesPerOutput)
 	actualSections := splitIntoSections(string(actualOutput), req.NumLinesPerOutput)
 
-	var localFailingCases FTestMaps
+	var localFailingCases []*FTestMaps
 
 	// Identify failing cases for the current file
 	for i := 0; i < len(inputSections); i++ {
 		if expectedSections[i] != actualSections[i] {
-			localFailingCases = append(localFailingCases, struct {
-				Input        string `json:"in"`
-				SystemOutput string `json:"sOut"`
-				UserOutput   string `json:"uOut"`
-			}{
+			localFailingCases = append(localFailingCases, &FTestMaps{
 				Input:        inputSections[i],
 				SystemOutput: expectedSections[i],
 				UserOutput:   actualSections[i],
@@ -60,7 +56,7 @@ func ProcessTestCase(binaryPath, testCasesDir, fileName string, req *Request, fa
 
 	// Lock the shared data structure before appending to maintain order
 	mu.Lock()
-	*failingCases = append(*failingCases, localFailingCases...)
+	failingCases[index] = append(failingCases[index], localFailingCases...)
 	mu.Unlock()
 	return nil
 }
